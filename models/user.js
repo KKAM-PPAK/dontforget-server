@@ -22,6 +22,9 @@ const userSchema = new mongoose.Schema({
     required: true,
   },
   timeline: [timelineSchema],
+  refreshToken: {
+    type: String,
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);
