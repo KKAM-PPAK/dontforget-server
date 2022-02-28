@@ -1,10 +1,32 @@
 const express = require("express");
+const jwt = require("jsonwebtoken");
+
+const decodeToken = require("../utils/decodeToken");
+const User = require("../models/user");
 
 const router = express.Router();
 
-/* GET users listing. */
 router.get("/", (req, res, next) => {
-  res.send("respond with a resource");
+  res.status(200).send("respond with a resource");
+});
+
+router.post("/new", decodeToken, async (req, res, next) => {
+  const { email, uid, name } = req.payload;
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      await User.create({ email, name, uid });
+    }
+
+    const accessToken = jwt.sign({ email, uid, name }, process.env.JWT_SECRET_KEY, {
+      expiresIn: "1h",
+    });
+    res.send({ email, name, uid, accessToken });
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
 });
 
 module.exports = router;

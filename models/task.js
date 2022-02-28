@@ -1,9 +1,6 @@
 const mongoose = require("mongoose");
 
 const memoSchema = new mongoose.Schema({
-  _id: {
-    type: mongoose.Schema.Types.ObjectId,
-  },
   description: {
     type: String,
   },
@@ -22,9 +19,6 @@ const memoSchema = new mongoose.Schema({
 });
 
 const taskSchema = new mongoose.Schema({
-  _id: {
-    type: mongoose.Schema.Types.ObjectId,
-  },
   title: {
     type: String,
   },

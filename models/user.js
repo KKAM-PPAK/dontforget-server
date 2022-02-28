@@ -1,10 +1,6 @@
 const mongoose = require("mongoose");
 
 const timelineSchema = new mongoose.Schema({
-  _id: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-  },
   distance: {
     type: Number,
   },
@@ -14,13 +10,12 @@ const timelineSchema = new mongoose.Schema({
 });
 
 const userSchema = new mongoose.Schema({
-  _id: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-  },
   email: {
     type: String,
     required: true,
+  },
+  uid: {
+    type: String,
   },
   name: {
     type: String,
