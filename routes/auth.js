@@ -8,7 +8,18 @@ const User = require("../models/user");
 const router = express.Router();
 
 router.get("/user", checkHeader, async (req, res, next) => {
-  const { user, accessToken } = req;
+  const { user, accessToken, refreshUser } = req;
+
+  if (refreshUser) {
+    const matchUser = await User.findOne({ email: refreshUser });
+    const { email, name, uid } = matchUser;
+    const accessToken = jwt.sign({ email, name, uid }, process.env.JWT_SECRET_KEY, {
+      expiresIn: "1h",
+    });
+
+    res.send({ email, name, uid, accessToken });
+    return;
+  }
 
   try {
     const userInfo = await User.findOne({ email: user.email });

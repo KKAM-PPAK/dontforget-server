@@ -20,7 +20,11 @@ async function checkHeader(req, res, next) {
       const { email } = jwt.verify(accessToken, process.env.JWT_SECRET_KEY, {
         ignoreExpiration: true,
       });
+
+      req.refreshUser = email;
+      next();
     }
+
     console.error(error);
     next(createError(error));
   }
