@@ -1,12 +1,16 @@
-const createError = require("http-errors");
+const createHttpError = require("http-errors");
 const jwt = require("jsonwebtoken");
+const User = require("../models/user");
 
 async function checkHeader(req, res, next) {
   const accessToken = req.headers.authorization.split(" ")[1];
 
   if (!accessToken) {
-    res.send("no accessToken!");
+    res.status(404).send("no accessToken!");
+
+    next();
   }
+
   try {
     const user = jwt.verify(accessToken, process.env.JWT_SECRET_KEY);
 
@@ -15,18 +19,28 @@ async function checkHeader(req, res, next) {
 
     next();
   } catch (error) {
-    console.log(error.message);
-    if (error.message === "TokenExpiredError") {
+    if (error.message === "jwt expired") {
       const { email } = jwt.verify(accessToken, process.env.JWT_SECRET_KEY, {
         ignoreExpiration: true,
       });
 
-      req.refreshUser = email;
+      const user = await User.findOne({ email });
+      const verifyRefreshToken = jwt.verify(user.refreshToken, process.env.JWT_SECRET_KEY);
+
+      if (!verifyRefreshToken) {
+        next(createHttpError(error));
+      }
+
+      const { uid, name } = user;
+      const newAccessToken = jwt.sign({ email, uid, name }, process.env.JWT_SECRET_KEY, {
+        expiresIn: "10m",
+      });
+
+      req.user = user;
+      req.accessToken = newAccessToken;
+
       next();
     }
-
-    console.error(error);
-    next(createError(error));
   }
 }
 

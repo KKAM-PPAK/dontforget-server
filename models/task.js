@@ -12,6 +12,7 @@ const memoSchema = new mongoose.Schema({
   },
   created_at: {
     type: Date,
+    default: Date,
   },
   repeat: {
     type: Number,
@@ -29,6 +30,7 @@ const taskSchema = new mongoose.Schema({
   memo: [memoSchema],
   created_at: {
     type: Date,
+    default: Date,
   },
 });
 
