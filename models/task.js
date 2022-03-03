@@ -4,9 +4,6 @@ const memoSchema = new mongoose.Schema({
   description: {
     type: String,
   },
-  noti_time: {
-    type: Date,
-  },
   due_date: {
     type: Date,
   },

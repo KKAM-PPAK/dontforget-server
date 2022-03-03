@@ -49,3 +49,85 @@ exports.getUserTasks = async function (req, res, next) {
     next(error);
   }
 };
+
+exports.addMemo = async function (req, res, next) {
+  const { taskId } = req.params;
+  const { memo } = req.body;
+  try {
+    await Task.findByIdAndUpdate(taskId, {
+      $push: { memo: { description: memo.description, due_date: memo.due_date } },
+    });
+
+    res.send("Add new Memo");
+  } catch (error) {
+    console.error(error);
+    next(error);
+  }
+};
+
+exports.updateTask = async function (req, res, next) {
+  const { taskId } = req.params;
+  const { task } = req.body;
+
+  try {
+    await Task.findByIdAndUpdate(taskId, { title: task });
+
+    res.send("delete memo");
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+exports.updateMemo = async function (req, res, next) {
+  const { taskId, memoId } = req.params;
+  const { memo } = req.body.memoInfo;
+
+  try {
+    await Task.findOneAndUpdate(
+      { _id: taskId, "memo._id": memoId },
+      {
+        $set: {
+          "memo.$.description": memo.description,
+          "memo.$.due_date": memo.due_date,
+        },
+      },
+      { new: true },
+    );
+
+    res.send("update memo");
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+exports.deleteMemo = async function (req, res, next) {
+  const { taskId, memoId } = req.params;
+  try {
+    await Task.findByIdAndUpdate(taskId, {
+      $pull: {
+        memo: {
+          _id: memoId,
+        },
+      },
+    });
+
+    res.send("delete memo");
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
+
+exports.deleteTask = async function (req, res, next) {
+  const { taskId } = req.params;
+  try {
+    await Task.findByIdAndDelete(taskId);
+
+    res.send("delete memo");
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
+};
