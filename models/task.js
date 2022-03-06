@@ -12,7 +12,8 @@ const memoSchema = new mongoose.Schema({
     default: Date,
   },
   repeat: {
-    type: Number,
+    type: String,
+    default: "0",
   },
 });
 

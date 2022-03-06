@@ -3,7 +3,6 @@ const Task = require("../models/task");
 
 exports.createNewTask = async function (req, res, next) {
   const { memo, title } = req.body.task;
-  console.log(memo);
   const { email } = req.user;
 
   try {
@@ -14,14 +13,14 @@ exports.createNewTask = async function (req, res, next) {
       memo: {
         description: memo.description,
         due_date: memo.due_date,
-        noti_time: memo.noti_time,
+        repeat: memo.repeat,
       },
     };
 
     try {
-      await Task.create(newTask);
+      const result = await Task.create(newTask);
 
-      res.status(200).send("created new Task");
+      res.status(200).send(result);
     } catch (error) {
       console.error(error);
       next(error);
@@ -43,7 +42,7 @@ exports.getUserTasks = async function (req, res, next) {
 
     const tasks = await Task.find({ writer: writer._id });
 
-    res.send(tasks);
+    res.status(200).send(tasks);
   } catch (error) {
     console.error(error);
     next(error);
@@ -55,10 +54,12 @@ exports.addMemo = async function (req, res, next) {
   const { memo } = req.body;
   try {
     await Task.findByIdAndUpdate(taskId, {
-      $push: { memo: { description: memo.description, due_date: memo.due_date } },
+      $push: {
+        memo: { description: memo.description, due_date: memo.due_date, repeat: memo.repeat },
+      },
     });
 
-    res.send("Add new Memo");
+    res.status(200).send("Added new memeo");
   } catch (error) {
     console.error(error);
     next(error);
@@ -72,7 +73,7 @@ exports.updateTask = async function (req, res, next) {
   try {
     await Task.findByIdAndUpdate(taskId, { title: task });
 
-    res.send("delete memo");
+    res.send("update Task");
   } catch (error) {
     console.log(error);
     next(error);
@@ -84,18 +85,19 @@ exports.updateMemo = async function (req, res, next) {
   const { memo } = req.body.memoInfo;
 
   try {
-    await Task.findOneAndUpdate(
+    const result = await Task.findOneAndUpdate(
       { _id: taskId, "memo._id": memoId },
       {
         $set: {
           "memo.$.description": memo.description,
           "memo.$.due_date": memo.due_date,
+          "memo.$.repeat": memo.repeat,
         },
       },
       { new: true },
     );
 
-    res.send("update memo");
+    res.status(200).send(result);
   } catch (error) {
     console.log(error);
     next(error);
