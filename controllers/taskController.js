@@ -11,6 +11,7 @@ exports.createNewTask = async function (req, res, next) {
       writer: writer._id,
       title,
       memo: {
+        title: memo.title,
         description: memo.description,
         due_date: memo.due_date,
         repeat: memo.repeat,
@@ -55,7 +56,12 @@ exports.addMemo = async function (req, res, next) {
   try {
     await Task.findByIdAndUpdate(taskId, {
       $push: {
-        memo: { description: memo.description, due_date: memo.due_date, repeat: memo.repeat },
+        memo: {
+          title: memo.title,
+          description: memo.description,
+          due_date: memo.due_date,
+          repeat: memo.repeat,
+        },
       },
     });
 
@@ -89,6 +95,7 @@ exports.updateMemo = async function (req, res, next) {
       { _id: taskId, "memo._id": memoId },
       {
         $set: {
+          "memo.$.title": memo.title,
           "memo.$.description": memo.description,
           "memo.$.due_date": memo.due_date,
           "memo.$.repeat": memo.repeat,

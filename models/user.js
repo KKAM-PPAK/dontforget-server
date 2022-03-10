@@ -4,8 +4,13 @@ const timelineSchema = new mongoose.Schema({
   distance: {
     type: Number,
   },
+  polyline: [
+    {
+      type: String,
+    },
+  ],
   created_at: {
-    type: Date,
+    type: String,
   },
 });
 

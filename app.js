@@ -8,6 +8,7 @@ const cors = require("cors");
 const connectDB = require("./db");
 const authRouter = require("./routes/auth");
 const taskRouter = require("./routes/task");
+const timelineRouter = require("./routes/timeline");
 const checkHeader = require("./utils/checkHeader");
 
 const app = express();
@@ -29,6 +30,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/auth", authRouter);
 app.use("/task", checkHeader, taskRouter);
+app.use("/timeline", checkHeader, timelineRouter);
 
 app.use((req, res, next) => {
   next(createError(404));
