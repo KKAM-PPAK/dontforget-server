@@ -28,10 +28,6 @@ app.use(express.urlencoded({ limit: "100mb", extended: true, parameterLimit: 500
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use("/text", (req, res, next) => {
-  res.send("hello");
-});
-
 app.use("/auth", authRouter);
 app.use("/task", checkHeader, taskRouter);
 app.use("/timeline", checkHeader, timelineRouter);
