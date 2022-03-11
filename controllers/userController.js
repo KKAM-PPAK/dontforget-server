@@ -8,7 +8,7 @@ exports.getUser = async function (req, res, next) {
     const userInfo = await User.findOne({ email: user.email });
 
     if (!userInfo) {
-      return res.send("User Not Found");
+      return res.status(404).send("User Not Found");
     }
 
     res.send({

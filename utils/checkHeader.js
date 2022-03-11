@@ -6,9 +6,7 @@ async function checkHeader(req, res, next) {
   const accessToken = req.headers.authorization.split(" ")[1];
 
   if (!accessToken) {
-    res.status(404).send("no accessToken!");
-
-    next();
+    return res.status(401).send("Unauthorized");
   }
 
   try {
@@ -30,6 +28,7 @@ async function checkHeader(req, res, next) {
         console.error(error.message);
         return res.status(404).send("you have to sign in first");
       }
+
       const verifyRefreshToken = jwt.verify(user.refreshToken, process.env.JWT_SECRET_KEY);
 
       if (!verifyRefreshToken) {

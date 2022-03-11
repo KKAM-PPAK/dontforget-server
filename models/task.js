@@ -3,14 +3,17 @@ const mongoose = require("mongoose");
 const memoSchema = new mongoose.Schema({
   title: {
     type: String,
+    default: "empty",
   },
   description: {
     type: String,
+    default: "empty",
   },
   due_date: {
     type: Date,
+    default: Date,
   },
-  created_at: {
+  did_date: {
     type: Date,
     default: Date,
   },
@@ -23,6 +26,7 @@ const memoSchema = new mongoose.Schema({
 const taskSchema = new mongoose.Schema({
   title: {
     type: String,
+    default: "empty",
   },
   writer: {
     type: mongoose.Schema.Types.ObjectId,

@@ -14,6 +14,7 @@ exports.createNewTask = async function (req, res, next) {
         title: memo.title,
         description: memo.description,
         due_date: memo.due_date,
+        did_date: memo.did_date,
         repeat: memo.repeat,
       },
     };
@@ -34,6 +35,7 @@ exports.createNewTask = async function (req, res, next) {
 
 exports.getUserTasks = async function (req, res, next) {
   const { email } = req.user;
+
   try {
     const writer = await User.findOne({ email });
 
@@ -53,12 +55,14 @@ exports.getUserTasks = async function (req, res, next) {
 exports.addMemo = async function (req, res, next) {
   const { taskId } = req.params;
   const { memo } = req.body;
+
   try {
     await Task.findByIdAndUpdate(taskId, {
       $push: {
         memo: {
           title: memo.title,
           description: memo.description,
+          did_date: memo.did_date,
           due_date: memo.due_date,
           repeat: memo.repeat,
         },
@@ -98,6 +102,7 @@ exports.updateMemo = async function (req, res, next) {
           "memo.$.title": memo.title,
           "memo.$.description": memo.description,
           "memo.$.due_date": memo.due_date,
+          "memo.$.did_date": memo.did_date,
           "memo.$.repeat": memo.repeat,
         },
       },

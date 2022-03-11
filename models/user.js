@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const timelineSchema = new mongoose.Schema({
   distance: {
     type: Number,
+    default: 0,
   },
   polyline: [
     {
@@ -11,6 +12,7 @@ const timelineSchema = new mongoose.Schema({
   ],
   created_at: {
     type: String,
+    default: new Date().toISOString(),
   },
 });
 
@@ -21,6 +23,7 @@ const userSchema = new mongoose.Schema({
   },
   uid: {
     type: String,
+    required: true,
   },
   name: {
     type: String,
@@ -29,6 +32,7 @@ const userSchema = new mongoose.Schema({
   timeline: [timelineSchema],
   refreshToken: {
     type: String,
+    required: true,
   },
 });
 

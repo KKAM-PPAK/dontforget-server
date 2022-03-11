@@ -11,6 +11,7 @@ async function decodeToken(req, res, next) {
     const payload = ticket.getPayload();
 
     req.payload = payload ? { uid: payload.sub, email: payload.email, name: payload.name } : null;
+
     next();
   } catch (error) {
     next(createError(401));
