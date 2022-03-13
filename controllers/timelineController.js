@@ -1,7 +1,7 @@
 const User = require("../models/user");
 
 exports.addTimeline = async function (req, res, next) {
-  const { timeline } = req.body;
+  const { timeline, distance } = req.body;
   const { date } = req.params;
   const { email } = req.user;
 
@@ -13,7 +13,7 @@ exports.addTimeline = async function (req, res, next) {
           timeline: {
             polyline: timeline,
             created_at: date,
-            distance: 2,
+            distance,
           },
         },
       },
